@@ -7,13 +7,20 @@ led =LED(2)
 # 定义多种颜色的阈值
 color_thresholds = [
     ((0, 100, 20, 127, 127, -10), 'red', (255, 165, 0)),  # 红色阈值
-    ((30, 100, -64, -8, -32, 32), 'green', (0, 255, 255)),  # 绿色阈值
+    ((50, 100, -28, 0, 32, 51), 'li-ripe', (0, 255, 255)),  # 绿色阈值
+    #((35, 55, -41, -30, 29, 45),'apple-immaturate',(0,255,0)),
+    #((23, 40, -31, -13, 35, 45),'pear-immaturate',(255,255,255)),
+    #((15, 41, 30, 50, 0, 37),'qj',(255,255,255)),# 成熟青椒
+    #((10, 56, 0, 55, -15, 27),'xhs',(255,255,255)),#成熟西红柿
+    #((5, 25, -11, 8, -23, 15),'yc',(255,255,255)),#成熟洋葱
+    #((29, 77, 5, 41, 24, 49),'ng',(255,255,255)),#成熟南瓜
+    #((8, 100, -44, -17, -18, 40),'wcs',(0, 255, 255)),#未成熟
 ]
 
 # 初始化摄像头和LCD
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
-sensor.set_framesize(sensor.QQVGA)  # 适配LCD屏幕大小128x160
+sensor.set_framesize(sensor.QVGA)  # 适配LCD屏幕大小128x160
 lcd = display.SPIDisplay()
 clock = time.clock()
 area_threshold = 500  # 设置面积阈值
@@ -43,12 +50,12 @@ while True:
                 img.draw_cross(blob.cx(), blob.cy())
                 Lm = (b[2] + b[3]) / 2
                 length = K / Lm
-                if (color_name == 'red' and (length < min_length or not selected_blob)) or (color_name == 'green' and not selected_blob and length < min_length):
-                    selected_blob = (blob, frame_color, color_name, length)
-                    selected_blob_pixels = blob.pixels()
-                    min_length = length
-                    color_code = 1 if color_name == 'red' else 2
-                    display_text = f"Color: {color_name}\nDistance: {length:.2f} \nX={blob.cx()}, Y={blob.cy()}\nArea: {selected_blob_pixels}"
+
+                selected_blob = (blob, frame_color, color_name, length)
+                selected_blob_pixels = blob.pixels()
+                min_length = length
+                color_code = 1 if color_name == 'red' else 2
+                display_text = f"Color: {color_name}\nDistance: {length:.2f} \nX={blob.cx()}, Y={blob.cy()}\nArea: {selected_blob_pixels}"
 
     # 检查是否有选中的色块
     if selected_blob:
